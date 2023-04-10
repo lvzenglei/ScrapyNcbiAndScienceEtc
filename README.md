@@ -10,3 +10,12 @@ docker build -t scrapy_paper:1.0.4 .
 docker-compose -f docker-compose.yaml up -d 
 ```
 # 系统会自动爬取NCBI Science Nature Cell Circulation 一周内的单细胞文献
+
+# 在window 环境下运行时
+## 需要安装docker desktop window ，并安装WSL2 ---[由于上述镜像都是linux环境构建的，所以在window构建及运行时，一定要用wsl模拟linux]
+## 进入git目录，构建镜像启动
+```
+docker build -t scrapy_paper:1.0.4 .
+docker-compose -f docker-compose.yaml up -d 
+```
+## mongo compass 做mongodb的可视化
