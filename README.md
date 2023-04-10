@@ -1,5 +1,5 @@
 # ScrapyNcbiAndScienceEtc
-使用Scrapy + selenium 爬取NCBI Nature Science Cell等网站文献
+使用Scrapy + Selenium + ChromeDriver + Chrome 爬取NCBI Nature Science Cell等网站文献
 # 使用Dockerfile创建 scrapy镜像
 ```
 docker build -t scrapy_paper:1.0.4 .
