@@ -1,0 +1,24 @@
+version: '3.1'
+services:
+  mongo-scrapy-desktop:
+    image: mongo:latest
+    ports:
+      - "0.0.0.0:11112:27017"
+    volumes:
+      - ./data/mongodb:/data/db/
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=admin
+    container_name: mongo-scrapy-desktop
+  paper-scrapy-desktop:
+    image: scrapy_paper:1.0.4
+    volumes:
+      - .env:/app/.env
+    ports:
+      - "0.0.0.0:6800:6800"
+    container_name: paper-scrapy-desktop
+networks:
+  default:
+    external:
+      name: scrapy

@@ -1,0 +1,6 @@
+./data
+./data/*
+.env
+./mongo.tar
+./mongo-express.tar
+./scrapy_paper.tar
