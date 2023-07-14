@@ -122,7 +122,7 @@ class MyspiderDownloaderMiddleware:
     def process_request(self, request, spider):
         # Called for each request that goes through the downloader
         # middleware.
-        if 'www.science.org' not in request.url and 'www.cell.com' not in request.url and 'pubmed.ncbi' not in request.url and 'resurchify' not in request.url:
+        if 'www.science.org' not in request.url and 'www.cell.com' not in request.url and 'pubmed.ncbi' not in request.url and 'resurchify' not in request.url and 'ckb.jax.org' not in request.url :
         # if True:
             print('middleware is MyspiderDownloaderMiddleware')
             # thisip=get_proxy_smartproxy()
@@ -130,7 +130,7 @@ class MyspiderDownloaderMiddleware:
             # thisip=get_proxy_ipidea()
             # thisip=getUsefulIP()
             thisip=random.choice(IPPOOL)
-            request.meta["proxy"]= "http://"+thisip
+            # request.meta["proxy"]= "http://"+thisip
             # print(thisip)
             # print("this is ip:"+thisip["ipaddr"])
             # 由于代理池中的ip过少，因此暂时关闭IP代理池
@@ -194,7 +194,7 @@ class SeleniumMiddleware():
         :param spider: Spider对象
         :return: HtmlResponse
         """
-        if 'science.org' in request.url or 'www.cell.com' in request.url or 'pubmed.ncbi' in request.url or 'resurchify' in request.url:
+        if 'science.org' in request.url or 'www.cell.com' in request.url or 'pubmed.ncbi' in request.url or 'resurchify' in request.url or 'ckb.jax.org' in request.url:
         # if True:
             print('middleware is SeleniumMiddleware')
             try:
@@ -208,7 +208,7 @@ class SeleniumMiddleware():
                 # thisip=get_proxy_ipidea()
                 # thisip=getUsefulIP()
                 thisip=random.choice(IPPOOL)
-                options.add_argument(f'--proxy-server=http://{thisip}')
+                # options.add_argument(f'--proxy-server=http://{thisip}')
 
                 # print(thisip)
                 ua = UserAgent()

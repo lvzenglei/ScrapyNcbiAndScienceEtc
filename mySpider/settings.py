@@ -44,12 +44,14 @@ MONGO_DATABASE = env['MONGO_DATABASE']  # 数据库的名字(无法设置成docm
 BOT_NAME = 'mySpider'
 
 SPIDER_MODULES = [
-    'mySpider.spiders.docpapercell',
-    'mySpider.spiders.docpapercirculation',
-    'mySpider.spiders.docpapernature',
-    'mySpider.spiders.docpaperncbi',
-    'mySpider.spiders.docpaperscience',
-    'mySpider.spiders.docpaperdoi',
+    # 'mySpider.spiders.docpapercell',
+    # 'mySpider.spiders.docpapercirculation',
+    # 'mySpider.spiders.docpapernature',
+    # 'mySpider.spiders.docpaperncbi',
+    # 'mySpider.spiders.docpaperscience',
+    # 'mySpider.spiders.docpaperdoi',
+    'mySpider.spiders.ckbScrapyFirstStep',
+    'mySpider.spiders.ckbScrapySecondStep',
     ]
 NEWSPIDER_MODULE = 'mySpider.spiders'
 
@@ -66,7 +68,7 @@ IPPOOL=[
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 2
+CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -133,12 +135,12 @@ COOKIES_ENABLED = True
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 LOG_ENABLED = True
-LOG_FILE='./scrapy.log'
+LOG_FILE='./logs/scrapy.log'
 LOG_LEVEL = 'DEBUG' 
 RETRY_ENABLED = True
-RETRY_TIMES = 3
+RETRY_TIMES = 1
 # DNS_TIMEOUT = 20
-
+# REDIRECT_ENABLED = False
 
 DOWNLOADER_MIDDLEWARES = {
     #  'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware':543,
@@ -149,7 +151,7 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 ITEM_PIPELINES = {
-    'mySpider.pipelines.DocpaperPipeline': 300
+    'mySpider.pipelines_mongo.DocpaperPipeline': 300
 }
 
 # IMAGES_STORE = '/root/repo/mySpider/figure/'

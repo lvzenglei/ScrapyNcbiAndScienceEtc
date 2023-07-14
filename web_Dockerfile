@@ -9,6 +9,6 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 RUN chmod -R 777 /app
-EXPOSE 6800
+EXPOSE 5000
 # CMD ["bash", "-c", "/app/mySpider/run.sh"]
-CMD logparser -dir /app/logs & scrapyd
+CMD scrapydweb

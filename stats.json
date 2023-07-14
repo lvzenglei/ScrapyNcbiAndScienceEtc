@@ -1,0 +1,29 @@
+{
+    "status": "ok",
+    "datas": {},
+    "settings_py": "/nfs/disk7/user/lvzenglei/miniconda3/envs/scrapy/lib/python3.6/site-packages/logparser/settings.py",
+    "settings": {
+        "scrapyd_server": "127.0.0.1:6800",
+        "scrapyd_logs_dir": ".",
+        "parse_round_interval": 10,
+        "enable_telnet": true,
+        "override_telnet_console_host": "",
+        "log_encoding": "utf-8",
+        "log_extensions": [
+            ".log",
+            ".txt"
+        ],
+        "log_head_lines": 100,
+        "log_tail_lines": 200,
+        "log_categories_limit": 10,
+        "jobs_to_keep": 100,
+        "chunk_size": 10000000,
+        "delete_existing_json_files_at_startup": false,
+        "keep_data_in_memory": false,
+        "verbose": false,
+        "main_pid": 0
+    },
+    "last_update_timestamp": 1689217226,
+    "last_update_time": "2023-07-13 11:00:26",
+    "logparser_version": "0.8.2"
+}

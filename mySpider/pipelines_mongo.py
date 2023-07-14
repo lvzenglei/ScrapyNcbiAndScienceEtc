@@ -10,7 +10,7 @@ import scrapy
 from scrapy.pipelines.images import ImagesPipeline
 import os
 import pymongo
-from .items import PageItem,DoiItem
+from .items import *
 print('load piplines mongo')
 class MyspiderPipeline:
     def process_item(self, item, spider):
@@ -20,6 +20,12 @@ class DocpaperPipeline(object):
 
     pageitem_collection_name = 'PageItem' # 这里的地方是每页对应url连接的数据库表的名字
     doiitem_collection_name = 'DoiItem' # 这里的地方是doi相关信息连接的数据库表的名字
+    firstitem_collection_name = 'FirstPageItem' # 这里的地方是doi相关信息连接的数据库表的名字
+    GeneVarientsItems_collection_name = 'GeneVarientsItems' # 这里的地方是doi相关信息连接的数据库表的名字    
+    CATEGORY_VARIANTSItems_collection_name = 'CategoryVarientsItems' # 这里的地方是doi相关信息连接的数据库表的名字
+    MOLECULAR_PROFILESItems_collection_name = 'MolecularProfilesItems' # 这里的地方是doi相关信息连接的数据库表的名字
+    GENE_LEVEL_EVIDENCEItems_collection_name = 'GeneLevelEvidenceItems' # 这里的地方是doi相关信息连接的数据库表的名字
+    CLINICAL_TRIALSItems_collection_name = 'ClinicalTrialsItems' # 这里的地方是doi相关信息连接的数据库表的名字
 
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -50,4 +56,33 @@ class DocpaperPipeline(object):
             # self.db[self.doiitem_collection_name].insert_one(ItemAdapter(item).asdict())  # 纯插入
             self.db[self.doiitem_collection_name].update_one({'url':item['url']},{'$set':ItemAdapter(item).asdict()},upsert=True)  # 更新或插入
             self.db[self.pageitem_collection_name].update_one({'url':item['url'],'status':'score'},{'$set':{'status':'success'}}) #将关联url设置为爬取成功，后续就不再爬取
+        elif isinstance(item, FirstPageItem):
+            print('save on process FirstPageItem')
+            self.db[self.firstitem_collection_name].insert_one(ItemAdapter(item).asdict())
+            # print('save successfully')
+            # self.db[self.firstitem_collection_name].update_one({'type_url':item['type_url']},{'$setOnInsert':ItemAdapter(item).asdict()},upsert=True) # 更新或插入
+        elif isinstance(item, GeneVarientsItems):
+            print('save on process GeneVarientsItems')
+            self.db[self.GeneVarientsItems_collection_name].insert_one(ItemAdapter(item).asdict())  # 纯插入
+            self.db[self.firstitem_collection_name].update_one({'type_url':item['origin_url'],'status':'score'},{'$set':{'status':'success'}}) #将关联url设置为爬取成功，后续就不再爬取
+        
+        elif isinstance(item, CATEGORY_VARIANTSItems):
+            print('save on process CATEGORY_VARIANTSItems')
+            self.db[self.CATEGORY_VARIANTSItems_collection_name].insert_one(ItemAdapter(item).asdict())  # 纯插入
+            self.db[self.firstitem_collection_name].update_one({'type_url':item['origin_url'],'status':'score'},{'$set':{'status':'success'}}) #将关联url设置为爬取成功，后续就不再爬取
+        
+        elif isinstance(item, MOLECULAR_PROFILESItems):
+            print('save on process MOLECULAR_PROFILESItems')
+            self.db[self.MOLECULAR_PROFILESItems_collection_name].insert_one(ItemAdapter(item).asdict())  # 纯插入
+            self.db[self.firstitem_collection_name].update_one({'type_url':item['origin_url'],'status':'score'},{'$set':{'status':'success'}}) #将关联url设置为爬取成功，后续就不再爬取
+        
+        elif isinstance(item, GENE_LEVEL_EVIDENCEItems):
+            print('save on process GENE_LEVEL_EVIDENCEItems')
+            self.db[self.GENE_LEVEL_EVIDENCEItems_collection_name].insert_one(ItemAdapter(item).asdict())  # 纯插入
+            self.db[self.firstitem_collection_name].update_one({'type_url':item['origin_url'],'status':'score'},{'$set':{'status':'success'}}) #将关联url设置为爬取成功，后续就不再爬取
+        
+        elif isinstance(item, CLINICAL_TRIALSItems):
+            print('save on process CLINICAL_TRIALSItems')
+            self.db[self.CLINICAL_TRIALSItems_collection_name].insert_one(ItemAdapter(item).asdict())  # 纯插入
+            self.db[self.firstitem_collection_name].update_one({'type_url':item['origin_url'],'status':'score'},{'$set':{'status':'success'}}) #将关联url设置为爬取成功，后续就不再爬取
         return item

@@ -4,3 +4,8 @@
 ./mongo.tar
 ./mongo-express.tar
 ./scrapy_paper.tar
+./logs
+./Logs
+./build
+./mySpider/__pycache__
+./mySpider/spiders/__pycache__

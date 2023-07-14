@@ -1,7 +1,8 @@
 version: '3.1'
 services:
-  mongo-scrapy-desktop:
+  mongo-scrapy-deploy:
     image: mongo:latest
+    # network_mode: "host"
     ports:
       - "0.0.0.0:11112:27017"
     volumes:
@@ -10,14 +11,28 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
       - MONGO_INITDB_DATABASE=admin
-    container_name: mongo-scrapy-desktop
-  paper-scrapy-desktop:
-    image: scrapy_paper:1.0.4
+    container_name: mongo-scrapy-deploy
+  paper-scrapy-deploy:
+    image: scrapy_deploy:1.0.0
+    # network_mode: "host"
     volumes:
       - .env:/app/.env
+      - ./logs:/app/logs
     ports:
       - "0.0.0.0:6800:6800"
-    container_name: paper-scrapy-desktop
+    container_name: paper-scrapy-deploy
+  paper-scrapy-web:
+    image: chinaclark1203/scrapydweb:latest
+    # network_mode: "host"
+    depends_on:
+      - paper-scrapy-deploy
+      - mongo-scrapy-deploy
+    volumes:
+      - ./scrapydweb_settings_v10.py:/app/scrapydweb_settings_v10.py
+    ports:
+      - "0.0.0.0:5000:5000"
+    command: ['/bin/bash', '-c', 'scrapydweb']
+    container_name: paper-scrapy-web
 networks:
   default:
     external:
