@@ -26,3 +26,16 @@ docker-compose -f docker-compose.yaml up -d
 
 # To do List 
 - Deploying to a Scrapyd Server to control spider
+
+
+
+# 20230714 update
+add scrapyweb docker server with Dockerfile(web_Dockerfile)
+```
+
+docker build -t scrapy_deploy:1.0.0 .
+docker pull chinaclark1203/scrapydweb:latest
+docker-compose -f docker-compose.yaml up -d
+
+默认deploy 开放端口6800, scrapyweb 开放端口5000, 通过5000端口即可访问爬虫管理页面,在可视化界面进行操作
+```
