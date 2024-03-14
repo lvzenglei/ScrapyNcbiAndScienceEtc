@@ -52,6 +52,8 @@ SPIDER_MODULES = [
     # 'mySpider.spiders.docpaperdoi',
     'mySpider.spiders.ckbScrapyFirstStep',
     'mySpider.spiders.ckbScrapySecondStep',
+    'mySpider.spiders.oncokbScrapyFirstStep',
+    'mySpider.spiders.oncokbScrapySecondStep',
     ]
 NEWSPIDER_MODULE = 'mySpider.spiders'
 

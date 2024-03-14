@@ -11,7 +11,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from scrapy.http import HtmlResponse
+from scrapy.http import HtmlResponse, Response, TextResponse
 from logging import getLogger
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -122,7 +122,10 @@ class MyspiderDownloaderMiddleware:
     def process_request(self, request, spider):
         # Called for each request that goes through the downloader
         # middleware.
-        if 'www.science.org' not in request.url and 'www.cell.com' not in request.url and 'pubmed.ncbi' not in request.url and 'resurchify' not in request.url and 'ckb.jax.org' not in request.url :
+        site_name_list = ['www.science.org', 'www.cell.com', 'pubmed.ncbi', 'resurchify', 'ckb.jax.org', 'www.oncokb.org']
+        special_url = 'https://www.oncokb.org/api/v1/utils/cancerGeneList.txt'
+        # if 'www.science.org' not in request.url and 'www.cell.com' not in request.url and 'pubmed.ncbi' not in request.url and 'resurchify' not in request.url and 'ckb.jax.org' not in request.url :
+        if any([True if site_name not in request.url else False for site_name in site_name_list] ) or special_url in request.url:
         # if True:
             print('middleware is MyspiderDownloaderMiddleware')
             # thisip=get_proxy_smartproxy()
@@ -194,7 +197,11 @@ class SeleniumMiddleware():
         :param spider: Spider对象
         :return: HtmlResponse
         """
-        if 'science.org' in request.url or 'www.cell.com' in request.url or 'pubmed.ncbi' in request.url or 'resurchify' in request.url or 'ckb.jax.org' in request.url:
+        # if 'science.org' in request.url or 'www.cell.com' in request.url or 'pubmed.ncbi' in request.url or 'resurchify' in request.url or 'ckb.jax.org' in request.url or 'oncokb.org' in request.url:
+        site_name_list = ['www.science.org', 'www.cell.com', 'pubmed.ncbi', 'resurchify', 'ckb.jax.org', 'www.oncokb.org']
+        special_url = 'https://www.oncokb.org/api/v1/utils/cancerGeneList.txt'
+        # if 'www.science.org' not in request.url and 'www.cell.com' not in request.url and 'pubmed.ncbi' not in request.url and 'resurchify' not in request.url and 'ckb.jax.org' not in request.url :
+        if any([True if site_name in request.url else False for site_name in site_name_list] ) and  special_url not in request.url:
         # if True:
             print('middleware is SeleniumMiddleware')
             try:
@@ -218,8 +225,8 @@ class SeleniumMiddleware():
                 
                 options.page_load_strategy = 'eager'
                 # print(options.arguments)
-                # self.browser =  webdriver.Chrome(executable_path = '/usr/local/bin/chromedriver',options=options)
-                self.browser =  webdriver.Chrome(options=options)
+                self.browser =  webdriver.Chrome(executable_path = '/usr/bin/chromedriver',options=options)
+                # self.browser =  webdriver.Chrome(options=options)
                 # self.browser.maximize_window()
                 # self.browser.set_window_size(1400, 700)
                 # wait = WebDriverWait(self.browser, self.timeout)

@@ -64,6 +64,7 @@ class FirstPageItem(scrapy.Item):
    date = scrapy.Field()  #插入时的时间
    status = scrapy.Field() # 目前是否已经爬取 (score,submit,success)
    type = scrapy.Field() # 记录的时哪个子页面
+   refseq_id = scrapy.Field(default='NA')
    
 class GeneVarientsItems(scrapy.Item):
    origin_url = scrapy.Field() # 初始页面的url-从firstpage扫描到的url
@@ -129,6 +130,19 @@ class CLINICAL_TRIALSItems(scrapy.Item):
    Covered_Countries = scrapy.Field()
    Other_Countries = scrapy.Field()
 
+   type = scrapy.Field() # 记录的时哪个子页面
+   gene = scrapy.Field() # 关联的基因名称
+   date = scrapy.Field()  #插入时的时间
+   status = scrapy.Field() # 目前是否已经爬取 (score,submit,success)
+
+class OncoKb_BiologicalItems(scrapy.Item):
+   origin_url = scrapy.Field() # 初始页面的url-从firstpage扫描到的url
+
+   Alteration = scrapy.Field()
+   Oncogenic = scrapy.Field()
+   Mutation_Effect = scrapy.Field()
+   Refseq = scrapy.Field()
+   
    type = scrapy.Field() # 记录的时哪个子页面
    gene = scrapy.Field() # 关联的基因名称
    date = scrapy.Field()  #插入时的时间
