@@ -42,6 +42,7 @@ class OncoKbScrapyThirdStepExportSpider(scrapy.Spider):
             df.to_excel(output_file, index=False, sheet_name=ONCOKB_SHEET_NAME)
 
             os.makedirs("/app/Regular_update_database/oncokb",exist_ok=True)
+            os.chmod("/app/Regular_update_database/oncokb", 0o777)
             shutil.copy(output_file,"/app/Regular_update_database/oncokb/")
             os.chmod(f"/app/Regular_update_database/oncokb/OncoKB_{self.formatted_date}.xlsx", 0o777)
             os.chmod(output_file, 0o777)
