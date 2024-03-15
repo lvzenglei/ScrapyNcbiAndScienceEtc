@@ -33,16 +33,19 @@ class OncoKbScrapyThirdStepExportSpider(scrapy.Spider):
         try:
             # 将查询结果转换为 DataFrame
             df = pd.DataFrame(list(cursor)).drop('_id',axis=1)
+            df = df[['gene','Alteration','Oncogenic','Mutation_Effect','Refseq']]
             
             # 将数据写入 Excel 文件
-            output_file = f'./Scrapy_Out_database/OncoKB_{self.formatted_date}.xlsx'
+            output_file = f'/app/Scrapy_Out_database/OncoKB_{self.formatted_date}.xlsx'
             self.logger.info(df.head())
             self.logger.info(f"output_file: {output_file}")
             df.to_excel(output_file, index=False, sheet_name=ONCOKB_SHEET_NAME)
 
-            os.makedirs(ONCOKB_FINAL_DIR,exist_ok=True)
-            shutil.copy(output_file,ONCOKB_FINAL_DIR)
-            self.logger.info(f'Data exported to {ONCOKB_FINAL_DIR}/{os.path.basename(output_file)}')
+            os.makedirs("/app/Regular_update_database/oncokb",exist_ok=True)
+            shutil.copy(output_file,"/app/Regular_update_database/oncokb/")
+            os.chmod(f"/app/Regular_update_database/oncokb/OncoKB_{self.formatted_date}.xlsx", 0o777)
+            os.chmod(output_file, 0o777)
+            self.logger.info(f'Data exported to /app/Regular_update_database/oncokb/{os.path.basename(output_file)}')
         except Exception as e:
             self.logger.info(f'Data exported Error: {e}')
 
