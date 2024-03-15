@@ -30,17 +30,21 @@ class OncoKbScrapyThirdStepExportSpider(scrapy.Spider):
         projection = {'gene': 1, 'Alteration': 1, 'Oncogenic': 1, 'Mutation_Effect': 1, 'Refseq': 1}  # 挑选需要的字段，1表示要包含在结果中，0表示不包含
         # 查询数据
         cursor = self.collection.find(query, projection)
+        try:
+            # 将查询结果转换为 DataFrame
+            df = pd.DataFrame(list(cursor)).drop('_id',axis=1)
+            
+            # 将数据写入 Excel 文件
+            output_file = f'./Scrapy_Out_database/OncoKB_{self.formatted_date}.xlsx'
+            self.logger.info(df.head())
+            self.logger.info(f"output_file: {output_file}")
+            df.to_excel(output_file, index=False, sheet_name=ONCOKB_SHEET_NAME)
 
-        # 将查询结果转换为 DataFrame
-        df = pd.DataFrame(list(cursor)).drop('_id',axis=1)
-
-        # 将数据写入 Excel 文件
-        output_file = f'./Scrapy_Out_database/OncoKB_{self.formatted_date}.xlsx'
-        df.to_excel(output_file, index=False, sheet_name=ONCOKB_SHEET_NAME)
-
-        os.makedirs(ONCOKB_FINAL_DIR,exist_ok=True)
-        shutil.copy(output_file,ONCOKB_FINAL_DIR)
-        print(f'Data exported to {ONCOKB_FINAL_DIR}/{os.path.basename(output_file)}')
+            os.makedirs(ONCOKB_FINAL_DIR,exist_ok=True)
+            shutil.copy(output_file,ONCOKB_FINAL_DIR)
+            self.logger.info(f'Data exported to {ONCOKB_FINAL_DIR}/{os.path.basename(output_file)}')
+        except Exception as e:
+            self.logger.info(f'Data exported Error: {e}')
 
         item['date'] = datetime.datetime.now()
         item['batch'] = self.formatted_date

@@ -23,6 +23,8 @@ services:
       - ./eggs:/app/eggs
       - ./items:/app/items
       - ./scrapyd.conf:/app/scrapyd.conf
+      - ./Scrapy_Out_database/:/app/Scrapy_Out_database
+      - /nfs/disk1/user/training/519_xlsx/database/Regular_update_database/:/app/Scrapy_Out_database/
     ports:
       - "0.0.0.0:6800:6800"
     environment:

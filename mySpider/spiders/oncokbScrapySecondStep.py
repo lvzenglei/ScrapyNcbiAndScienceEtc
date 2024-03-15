@@ -42,11 +42,10 @@ class OncoKBScrapySecondStepSpider(scrapy.Spider):
         all_urls = []
         # all_urls = db['PageItem'].find({'status':'score','type':'Circulation'},{'url':1})
         # all_urls = db['FirstPageItem'].find({'status':'score'},{'type_url':1})
-        all_score = db['FirstPageItem'].find({'status':'score','type':'Biological','oncokb_annotated':'Yes'},{'type_url':1, 'gene':1, 'refseq_id':1}).sort('_id', -1).limit(50)
+        all_score = db['FirstPageItem'].find({'status':'score','type':'Biological','oncokb_annotated':'Yes'},{'type_url':1, 'gene':1, 'refseq_id':1}).sort('_id', -1).limit(100)
         # all_score = db['FirstPageItem'].find({'status':'score','type':'Biological'},{'type_url':1, 'gene':1, 'refseq_id':1}).sort('_id', -1).limit(2)
         for single_score in all_score:
             all_urls.append(single_score['type_url'])
-        print(all_urls[0])
         self.start_urls = all_urls
         self.db = db
         self.firstitem_collection_name = 'FirstPageItem'
