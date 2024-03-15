@@ -10,3 +10,5 @@ mySpider/__pycache__
 mySpider/spiders/__pycache__
 logs/
 dbs
+items/
+Scrapy_Out_database
