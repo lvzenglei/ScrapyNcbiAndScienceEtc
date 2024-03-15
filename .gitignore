@@ -12,3 +12,4 @@ logs/
 dbs
 items/
 Scrapy_Out_database
+scrapydweb_data
