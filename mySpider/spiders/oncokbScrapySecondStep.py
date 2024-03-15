@@ -39,11 +39,10 @@ class OncoKBScrapySecondStepSpider(scrapy.Spider):
         all_urls = []
         # all_urls = db['PageItem'].find({'status':'score','type':'Circulation'},{'url':1})
         # all_urls = db['FirstPageItem'].find({'status':'score'},{'type_url':1})
-        # all_score = db['FirstPageItem'].find({'status':'score','type':'Biological'},{'type_url':1, 'gene':1, 'refseq_id':1})
-        all_score = db['FirstPageItem'].find({'status':'score','type':'Biological'},{'type_url':1, 'gene':1, 'refseq_id':1}).sort('_id', -1).limit(2)
+        all_score = db['FirstPageItem'].find({'status':'score','type':'Biological'},{'type_url':1, 'gene':1, 'refseq_id':1}).sort('_id', -1).limit(50)
+        # all_score = db['FirstPageItem'].find({'status':'score','type':'Biological'},{'type_url':1, 'gene':1, 'refseq_id':1}).sort('_id', -1).limit(2)
         for single_score in all_score:
             all_urls.append(single_score['type_url'])
-        print(all_urls)
         self.start_urls = all_urls
         self.db = db
         self.firstitem_collection_name = 'FirstPageItem'
@@ -51,8 +50,8 @@ class OncoKBScrapySecondStepSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        url = response.url
-        if "Biological" in url:
+        if response.status == 200:
+            url = response.url
             return_item = OncoKb_BiologicalItems()
             gene = re.match(r'.*gene/(.*?)#tab=Biological.*',url).group(1)
             onco_score = self.db['FirstPageItem'].find({'gene':gene,'type':'Biological'},{'refseq_id':1}).sort('_id', -1).limit(2)
@@ -64,4 +63,6 @@ class OncoKBScrapySecondStepSpider(scrapy.Spider):
                 for key,value in item.items():
                     return_item[key] = value
                 yield return_item
+        else:
+            self.logger.warning(f"Failed to fetch {response.url}. Status code: {response.status}. Maybe all pages had been scrapyd")
 

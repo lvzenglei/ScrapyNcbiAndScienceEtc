@@ -27,6 +27,7 @@ class DocpaperPipeline(object):
     GENE_LEVEL_EVIDENCEItems_collection_name = 'GeneLevelEvidenceItems' # 这里的地方是doi相关信息连接的数据库表的名字
     CLINICAL_TRIALSItems_collection_name = 'ClinicalTrialsItems' # 这里的地方是doi相关信息连接的数据库表的名字
     OncoKb_BiologicalItems_collection_name = 'OncoKb_BiologicalItems' # 这里的地方是doi相关信息连接的数据库表的名字
+    OncoKb_BiologicalExportItems_collection_name = 'OncoKb_BiologicalExportItems' # 这里的地方是doi相关信息连接的数据库表的名字
 
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -89,6 +90,10 @@ class DocpaperPipeline(object):
 
         elif isinstance(item, OncoKb_BiologicalItems):
             print('save on process OncoKb_BiologicalItems')
-            self.db[self.OncoKb_BiologicalItems_collection_name].insert_one(ItemAdapter(item).asdict())  # 纯插入
+            self.db[self.OncoKb_BiologicalItems_collection_name].update_one({'gene':item['gene'], 'Alteration':item['Alteration']},{'$setOnInsert':ItemAdapter(item).asdict()},upsert=True) # 更新或插入
             self.db[self.firstitem_collection_name].update_one({'type_url':item['origin_url'],'status':'score'},{'$set':{'status':'success'}}) #将关联url设置为爬取成功，后续就不再爬取
+
+        elif isinstance(item, OncoKb_Biological_ExportItems):
+            print('save on process OncoKb_Biological_ExportItems')
+            self.db[self.OncoKb_BiologicalExportItems_collection_name].insert_one(ItemAdapter(item).asdict())  # 纯插入
         return item

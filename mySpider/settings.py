@@ -28,7 +28,10 @@ for env_f in env_list:
     else:
         value = int(value)
     env[key] = value
-print('Loading config file successfully')
+
+ONCOKB_FINAL_DIR=env.get('OncoKB_Final_Dir','/nfs/disk1/user/training/519_xlsx/database/Regular_update_database/oncokb/')
+ONCOKB_SHEET_NAME=env.get('ONCOKB_SHEET_NAME','OncoKB')
+# print('Loading config file successfully')
 # PROXYUSENAME = env['PROXYUSENAME']
 # PROXYPASSWORD = env['PROXYPASSWORD']
 # KUAI_ORDERID = env['KUAI_ORDERID']
@@ -54,6 +57,7 @@ SPIDER_MODULES = [
     'mySpider.spiders.ckbScrapySecondStep',
     'mySpider.spiders.oncokbScrapyFirstStep',
     'mySpider.spiders.oncokbScrapySecondStep',
+    'mySpider.spiders.oncokbScrapyThirdStepExport',
     ]
 NEWSPIDER_MODULE = 'mySpider.spiders'
 
@@ -166,4 +170,4 @@ ITEM_PIPELINES = {
 SELENIUM_TIMEOUT = 20
 SELENIUM_DRIVER_ARGUMENTS=['--headless','--disable-dev-shm-usage','--no-sandbox'] 
 
-print('load all config info successfully!!!')
+# print('load all config info successfully!!!')

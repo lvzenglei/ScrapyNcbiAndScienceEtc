@@ -147,3 +147,9 @@ class OncoKb_BiologicalItems(scrapy.Item):
    gene = scrapy.Field() # 关联的基因名称
    date = scrapy.Field()  #插入时的时间
    status = scrapy.Field() # 目前是否已经爬取 (score,submit,success)
+
+class OncoKb_Biological_ExportItems(scrapy.Item):
+   action = scrapy.Field()  #插入时的时间
+   date = scrapy.Field()  #插入时的时间
+   batch = scrapy.Field() #更新对应的批次时间
+   status = scrapy.Field() # 目前是否已经爬取 (score,submit,success)

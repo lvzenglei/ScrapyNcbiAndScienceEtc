@@ -215,7 +215,7 @@ class SeleniumMiddleware():
                 # thisip=get_proxy_ipidea()
                 # thisip=getUsefulIP()
                 thisip=random.choice(IPPOOL)
-                # options.add_argument(f'--proxy-server=http://{thisip}')
+                options.add_argument(f'--proxy-server=http://{thisip}')
 
                 # print(thisip)
                 ua = UserAgent()
@@ -225,8 +225,13 @@ class SeleniumMiddleware():
                 
                 options.page_load_strategy = 'eager'
                 # print(options.arguments)
-                self.browser =  webdriver.Chrome(executable_path = '/usr/bin/chromedriver',options=options)
-                # self.browser =  webdriver.Chrome(options=options)
+                # self.browser =  webdriver.Chrome(executable_path = '/usr/bin/chromedriver',options=options)
+                if os.path.exists('/usr/bin/chromedriver'):
+                    self.browser =  webdriver.Chrome(executable_path='/usr/bin/chromedriver',options=options)
+                elif os.path.exists('/usr/local/bin/chromedriver'):
+                    self.browser =  webdriver.Chrome(executable_path='/usr/local/bin/chromedriver', options=options)
+                else:
+                    self.browser =  webdriver.Chrome(options=options)
                 # self.browser.maximize_window()
                 # self.browser.set_window_size(1400, 700)
                 # wait = WebDriverWait(self.browser, self.timeout)
