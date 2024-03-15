@@ -9,6 +9,17 @@ DOCS: https://github.com/my8100/files/blob/master/scrapydweb/README.md
 """
 import os
 
+# 从本地.env文件中添加环境变量
+def load_env_file(file_path):
+    with open(file_path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#'):
+                key, value = line.split('=', 1)
+                os.environ[key] = value.replace("'","").replace('"','')
+
+# 加载.env文件中的环境变量到os.environ中
+load_env_file('.env')
 
 ############################## QUICK SETUP start ##############################
 ############################## 快速设置 开始 ###################################
@@ -20,10 +31,10 @@ SCRAPYDWEB_BIND = '0.0.0.0'
 SCRAPYDWEB_PORT = 5000
 
 # The default is False, set it to True to enable basic auth for the web UI.
-ENABLE_AUTH = False
+ENABLE_AUTH = True
 # In order to enable basic auth, both USERNAME and PASSWORD should be non-empty strings.
-USERNAME = ''
-PASSWORD = ''
+USERNAME = os.environ.get('Scrapydweb_USERNAME','')
+PASSWORD = os.environ.get('Scrapydweb_PASSWORD','')
 
 
 # Make sure that [Scrapyd](https://github.com/scrapy/scrapyd) has been installed
@@ -48,8 +59,8 @@ PASSWORD = ''
 
 SCRAPYD_SERVERS = [
     # '127.0.0.1:6800',
-    # '192.168.100.103:6800',
-    'paper-scrapy-deploy:6800',
+    '192.168.100.103:6800',
+    # 'paper-scrapy-deploy:6800',
     # 'username:password@localhost:6801#group',
     # ('', '', '192.168.100.103', '6800', ''),
 ]
@@ -223,7 +234,7 @@ EMAIL_SUBJECT = 'Email from #scrapydweb'
 # Leave this option as '' to default to the EMAIL_SENDER option below; Otherwise, set it up
 # if your email service provider requires an username which is different from the EMAIL_SENDER option below to login.
 # e.g. 'username'
-EMAIL_USERNAME = ''
+EMAIL_USERNAME = 'autowork@genesmile.com'
 # As for different email service provider, you might have to get an APP password (like Gmail)
 # or an authorization code (like QQ mail) and set it as the EMAIL_PASSWORD.
 # Check out links below to get more help:
@@ -233,9 +244,9 @@ EMAIL_USERNAME = ''
 EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
 
 # e.g. 'username@gmail.com'
-EMAIL_SENDER = ''
+EMAIL_SENDER = 'autowork@genesmile.com'
 # e.g. ['username@gmail.com', ]
-EMAIL_RECIPIENTS = [EMAIL_SENDER]
+EMAIL_RECIPIENTS = ['lvzenglei@genesmile.com']
 
 ########## email smtp settings ##########
 # Check out this link if you are using ECS of Alibaba Cloud and your SMTP server provides TCP port 25 only:
@@ -244,16 +255,16 @@ EMAIL_RECIPIENTS = [EMAIL_SENDER]
 # Config for https://mail.google.com:           ('smtp.gmail.com', 587, False)
 # Config for https://mail.qq.com using SSL:     ('smtp.qq.com', 465, True)
 # Config for http://mail.10086.cn:              ('smtp.139.com', 25, False)
-SMTP_SERVER = ''
-SMTP_PORT = 0
-SMTP_OVER_SSL = False
+SMTP_SERVER = 'smtp.exmail.qq.com'
+SMTP_PORT = 465
+SMTP_OVER_SSL = True
 # The timeout in seconds for the connection attempt, the default is 30.
 SMTP_CONNECTION_TIMEOUT = 30
 
 
 ############################## Monitor & Alert ################################
 # The default is False, set it to True to launch the poll subprocess to monitor your crawling jobs.
-ENABLE_MONITOR = False
+ENABLE_MONITOR = True
 
 ########## poll interval ##########
 # Tip: In order to be notified (and stop or forcestop a job when triggered) in time,
@@ -273,16 +284,17 @@ POLL_REQUEST_INTERVAL = 10
 # You have to set up your accounts in the "Send text" section above first.
 ENABLE_SLACK_ALERT = False
 ENABLE_TELEGRAM_ALERT = False
-ENABLE_EMAIL_ALERT = False
+ENABLE_EMAIL_ALERT = True
 
 ########## alert working time ##########
 # Monday is 1 and Sunday is 7.
 # e.g, [1, 2, 3, 4, 5, 6, 7]
-ALERT_WORKING_DAYS = []
+ALERT_WORKING_DAYS = [1, 2, 3, 4, 5, 6, 7]
 
 # From 0 to 23.
 # e.g. [9] + list(range(15, 18)) >>> [9, 15, 16, 17], or range(24) for 24 hours
-ALERT_WORKING_HOURS = []
+# ALERT_WORKING_HOURS = []
+ALERT_WORKING_HOURS = range(24)
 
 ########## basic triggers ##########
 # Trigger alert every N seconds for each running job.
@@ -291,7 +303,7 @@ ON_JOB_RUNNING_INTERVAL = 0
 
 # Trigger alert when a job is finished.
 # The default is False, set it to True to enable this trigger.
-ON_JOB_FINISHED = False
+ON_JOB_FINISHED = True
 
 ########## advanced triggers ##########
 # - LOG_XXX_THRESHOLD:
@@ -347,7 +359,8 @@ VERBOSE = True
 
 # The default is '', which means saving all program data in the Python directory.
 # e.g. 'C:/Users/username/scrapydweb_data' or '/home/username/scrapydweb_data'
-DATA_PATH = os.environ.get('DATA_PATH', '')
+# DATA_PATH = os.environ.get('DATA_PATH', '')
+DATA_PATH = './scrapydweb_data'
 
 # The default is '', which means saving data of Jobs and Timer Tasks in DATA_PATH using SQLite.
 # The data could be also saved in MySQL or PostgreSQL backend in order to improve concurrency.
