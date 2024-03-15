@@ -1,14 +1,8 @@
-# FROM joyzoursky/python-chromedriver:3.9-selenium
-FROM joyzoursky/python-chromedriver:3.6-selenium
-ENV http_proxy http://192.168.100.90:1985
-ENV https_proxy http://192.168.100.90:1985
+FROM python:3.8
 
-RUN mkdir -p /app
+RUN pip3 install Werkzeug==2.0.1 -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip3 install scrapydweb==1.5.0 -i https://pypi.tuna.tsinghua.edu.cn/simple
+ADD . /app
 WORKDIR /app
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . /app
-RUN chmod -R 777 /app
 EXPOSE 5000
-# CMD ["bash", "-c", "/app/mySpider/run.sh"]
 CMD scrapydweb

@@ -371,4 +371,5 @@ DATA_PATH = './scrapydweb_data'
 # 'postgres://username:password@127.0.0.1:5432'
 # 'sqlite:///C:/Users/username'
 # 'sqlite:////home/username'
-DATABASE_URL = os.environ.get('DATABASE_URL', '')
+# DATABASE_URL = os.environ.get('scrapydweb_DATABASE_URL', '')
+DATABASE_URL = 'sqlite:////app/scrapydweb_data'
