@@ -1,7 +1,7 @@
 # FROM joyzoursky/python-chromedriver:3.9-selenium
 FROM joyzoursky/python-chromedriver:3.6-selenium
-ENV http_proxy http://192.168.100.101:1985
-ENV https_proxy http://192.168.100.101:1985
+ENV http_proxy http://192.168.100.90:1985
+ENV https_proxy http://192.168.100.90:1985
 
 RUN mkdir -p /app
 WORKDIR /app

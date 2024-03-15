@@ -13,13 +13,20 @@ services:
       - MONGO_INITDB_DATABASE=admin
     container_name: mongo-scrapy-deploy
   paper-scrapy-deploy:
-    image: scrapy_deploy:1.0.0
+    image: scrapy_deploy:1.0.1
     # network_mode: "host"
     volumes:
       - .env:/app/.env
       - ./logs:/app/logs
+      - ./dbs:/app/dbs
+      - ./project.egg-info:/app/project.egg-info
+      - ./eggs:/app/eggs
+      - ./items:/app/items
+      - ./scrapyd.conf:/app/scrapyd.conf
     ports:
       - "0.0.0.0:6800:6800"
+    environment:
+      - TZ=Asia/Shanghai
     container_name: paper-scrapy-deploy
   paper-scrapy-web:
     image: chinaclark1203/scrapydweb:latest
@@ -29,8 +36,13 @@ services:
       - mongo-scrapy-deploy
     volumes:
       - ./scrapydweb_settings_v10.py:/app/scrapydweb_settings_v10.py
+      - ./.env:/app/.env
+      - ./scrapydweb_data:/app/scrapydweb_data
+
     ports:
       - "0.0.0.0:5000:5000"
+    environment:
+      - TZ=Asia/Shanghai
     command: ['/bin/bash', '-c', 'scrapydweb']
     container_name: paper-scrapy-web
 networks:

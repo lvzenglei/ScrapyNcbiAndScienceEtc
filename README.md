@@ -1,5 +1,5 @@
 # ScrapyNcbiAndScienceEtc
-使用Scrapy + Selenium + ChromeDriver + Chrome 爬取NCBI Nature Science Cell等网站文献
+使用Scrapy + Selenium + ChromeDriver + Chrome 爬取NCBI Nature Science Cell CKB OncoKb等网站文献
 # 一、linux 环境运行
 
 # 1.1 Dockerfile创建 scrapy镜像
@@ -38,4 +38,14 @@ docker pull chinaclark1203/scrapydweb:latest
 docker-compose -f docker-compose.yaml up -d
 
 默认deploy 开放端口6800, scrapyweb 开放端口5000, 通过5000端口即可访问爬虫管理页面,在可视化界面进行操作
+```
+
+# 20240314 update 
+add OncoKB database scrapy
+```
+docker build -t scrapy_deploy:1.0.1 .
+# change docker-compose scrapy_deploy version to 1.0.1
+docker-compose -f docker-compose.yaml up -d
+
+# Warning: 请勿在setting文件中,添加print语句, 否则/api/listspiders/mySpider/, 会多显示print的内容
 ```
