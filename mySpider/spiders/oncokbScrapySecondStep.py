@@ -9,8 +9,8 @@ from ..settings import MONGO_URI,MONGO_DATABASE
 
 
 def get_oncokb_biological(response, gene, Refseq):
-    gene_elements = response.xpath('//h2/text()').getall()
-    if not gene_elements:
+    if len(response.text) < 100:
+        print(response.text)
         return '爬取页面整体为空, 可能达到网页限制, 请更换ip后重试,或者第二天再试'
     table_elements = response.xpath('//div[@class="rt-tbody"]//div[contains(@class, "-odd") or contains(@class, "-even")]')
     biological_list = []
@@ -66,7 +66,7 @@ class OncoKBScrapySecondStepSpider(scrapy.Spider):
                 self.crawler.engine.close_spider(self, "empty_response")
                 items = pd.DataFrame().to_dict(orient='index')
             elif not items:
-                self.db[self.firstitem_collection_name].update_one({'type_url':url,'status':'score'},{'$set':{'status':'success'}}) #将关联url设置为爬取成功，后续就不再爬取
+                self.db[self.firstitem_collection_name].update_one({'type_url':url,'status':'score'},{'$set':{'status':'empty'}}) # 若页面中无内容, 则对firstpageItem中状态更新为empty
             for item in items.values():
                 for key,value in item.items():
                     return_item[key] = value

@@ -236,6 +236,10 @@ class SeleniumMiddleware():
                 # self.browser.set_window_size(1400, 700)
                 # wait = WebDriverWait(self.browser, self.timeout)
                 self.browser.get(request.url)
+                if 'www.oncokb.org' in request.url:
+                    WebDriverWait(self.browser, 10).until(
+                        EC.presence_of_element_located((By.CLASS_NAME, "rt-tbody"))
+                    )
                 # if 'www.science.org' in request.url:
                 #     wait.until(EC.presence_of_element_located((By.ID, 'pb-page-content')))
                 # elif 'www.cell.com' in request.url:
