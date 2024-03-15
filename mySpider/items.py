@@ -65,6 +65,7 @@ class FirstPageItem(scrapy.Item):
    status = scrapy.Field() # 目前是否已经爬取 (score,submit,success)
    type = scrapy.Field() # 记录的时哪个子页面
    refseq_id = scrapy.Field(default='NA')
+   oncokb_annotated = scrapy.Field(default='No')
    
 class GeneVarientsItems(scrapy.Item):
    origin_url = scrapy.Field() # 初始页面的url-从firstpage扫描到的url

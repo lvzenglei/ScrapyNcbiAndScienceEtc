@@ -9,6 +9,9 @@ from ..settings import MONGO_URI,MONGO_DATABASE
 
 
 def get_oncokb_biological(response, gene, Refseq):
+    gene_elements = response.xpath('//h2/text()').getall()
+    if not gene_elements:
+        return '爬取页面整体为空, 可能达到网页限制, 请更换ip后重试,或者第二天再试'
     table_elements = response.xpath('//div[@class="rt-tbody"]//div[contains(@class, "-odd") or contains(@class, "-even")]')
     biological_list = []
     for table_element in table_elements:
@@ -39,10 +42,11 @@ class OncoKBScrapySecondStepSpider(scrapy.Spider):
         all_urls = []
         # all_urls = db['PageItem'].find({'status':'score','type':'Circulation'},{'url':1})
         # all_urls = db['FirstPageItem'].find({'status':'score'},{'type_url':1})
-        all_score = db['FirstPageItem'].find({'status':'score','type':'Biological'},{'type_url':1, 'gene':1, 'refseq_id':1}).sort('_id', -1).limit(50)
+        all_score = db['FirstPageItem'].find({'status':'score','type':'Biological','oncokb_annotated':'Yes'},{'type_url':1, 'gene':1, 'refseq_id':1}).sort('_id', -1).limit(50)
         # all_score = db['FirstPageItem'].find({'status':'score','type':'Biological'},{'type_url':1, 'gene':1, 'refseq_id':1}).sort('_id', -1).limit(2)
         for single_score in all_score:
             all_urls.append(single_score['type_url'])
+        print(all_urls[0])
         self.start_urls = all_urls
         self.db = db
         self.firstitem_collection_name = 'FirstPageItem'
@@ -57,7 +61,11 @@ class OncoKBScrapySecondStepSpider(scrapy.Spider):
             onco_score = self.db['FirstPageItem'].find({'gene':gene,'type':'Biological'},{'refseq_id':1}).sort('_id', -1).limit(2)
             Refseq = onco_score[0]['refseq_id']
             items = get_oncokb_biological(response, gene, Refseq)
-            if not items:
+            if isinstance(items,str):
+                self.logger.error(items)
+                self.crawler.engine.close_spider(self, "empty_response")
+                items = pd.DataFrame().to_dict(orient='index')
+            elif not items:
                 self.db[self.firstitem_collection_name].update_one({'type_url':url,'status':'score'},{'$set':{'status':'success'}}) #将关联url设置为爬取成功，后续就不再爬取
             for item in items.values():
                 for key,value in item.items():
