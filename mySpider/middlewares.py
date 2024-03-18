@@ -237,9 +237,13 @@ class SeleniumMiddleware():
                 # wait = WebDriverWait(self.browser, self.timeout)
                 self.browser.get(request.url)
                 if 'www.oncokb.org' in request.url:
-                    WebDriverWait(self.browser, 10).until(
-                        EC.presence_of_element_located((By.CLASS_NAME, "rt-tbody"))
-                    )
+                    try:
+                        WebDriverWait(self.browser, 10).until(
+                            EC.presence_of_element_located((By.CLASS_NAME, "rt-tbody"))
+                        )
+                    except TimeoutException:
+                        # 这里如果没有except会直接500 intervar error, 添加处理后,可以正常输出返回内容
+                        spider.logger.info(f"Element with class 'rt-tbody' not found within 10 seconds, Maybe Page: {request.url} contains no alteration ~~~")
                 # if 'www.science.org' in request.url:
                 #     wait.until(EC.presence_of_element_located((By.ID, 'pb-page-content')))
                 # elif 'www.cell.com' in request.url:
